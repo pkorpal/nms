@@ -1,0 +1,41 @@
+[
+  {
+    "name": "NMS",
+    "port": 11000,
+    "changed": false,
+    "connections": [],
+    "active": true
+  },
+  {
+    "name": "R1",
+    "port": 45000,
+    "changed": false,
+    "connections": [
+      {
+        "portOut": 11,
+        "label": 27
+      },
+      {
+        "portOut": 12,
+        "label": 35
+      }
+    ],
+    "active": true
+  },
+  {
+    "name": "R2",
+    "port": 43000,
+    "changed": false,
+    "connections": [
+      {
+        "portOut": 24,
+        "label": 12
+      },
+      {
+        "portOut": 23,
+        "label": 32
+      }
+    ],
+    "active": false
+  }
+]
