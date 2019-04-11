@@ -198,8 +198,9 @@ public class AsynchronousSocketListener {
             if (content.IndexOf("<keep_alive>") > -1) {  
                 content = content.Replace("<keep_alive>", "");
                 KeepAliveMessage message = JsonConvert.DeserializeObject<KeepAliveMessage>(content);
-                Console.WriteLine("NMS: Keep Alive - Device {0} Endpoint {1}", message.name, message.endpoint);
+                Console.WriteLine("NMS: Keep Alive - Device {0}", message.name);
                 setDeviceActiveState(message.name, true);
+                changeDevicePort(getPort(handler), message.name);
                 string response = "Keep alive message received<EOF>"; 
                 Send(handler, response);  
             } else {  
@@ -209,8 +210,24 @@ public class AsynchronousSocketListener {
         }  
     }  
   
+    public static void changeDevicePort(int port, string name) {
+        DeviceSettings[] ds = checkConfigFile();
+        for (int i=0; i<ds.Length; i++) {
+            if (ds[i].name == name) { 
+                ds[i].port = port;
+            }
+        }
+        updateConfigFile(ds);
+
+    }
+    private static int getPort(Socket handler) {
+        string endpoint = handler.RemoteEndPoint.ToString();
+        string[] subs = endpoint.Split(":");
+        return int.Parse(subs[1]);
+    }
     private static void Send(Socket handler, String data) {  
 
+        // Console.WriteLine(handler.RemoteEndPoint);
         byte[] byteData = Encoding.ASCII.GetBytes(data);  
         handler.BeginSend(byteData, 0, byteData.Length, 0,  
             new AsyncCallback(SendCallback), handler);  
